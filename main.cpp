@@ -6,10 +6,11 @@
 
 #include <stdlib.h>
 
-#include "GameController.h"
+#include "Physics.h"
+#include "BallController.h"
 
 int kick = 0;
-GameController game; 
+BallController ball; 
 /* GLUT callback Handlers */
 
 static void resize(int width, int height)
@@ -39,11 +40,18 @@ static void display(void)
 	glutSolidCube(1);
 	glPopMatrix();
 
+	//Draw the goal post
+	glColor3d(0.1,0.1,0.1);
+	glPushMatrix();
+	glTranslated(0,0,-20);
+	glScaled(10,30,0.1);
+	glutSolidCube(1);
+	glPopMatrix();
 
 
 	if( kick == 1 )
 	{
-		game.game_loop();
+		ball.update();
 	}
 	glutSwapBuffers();
 
