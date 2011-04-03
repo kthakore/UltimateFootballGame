@@ -30,11 +30,10 @@ class Vector
 
 		}
 		Vector& operator*(const float &rhs) {
-			this->x = this->x * rhs;
-			this->y = this->y * rhs;
-			this->z = this->z * rhs;
-
-		}
+			this->x *= rhs;
+			this->y *= rhs;
+			this->z *= rhs;
+		}	
 		Vector( float X, float Y, float Z ){
 			this->x = X;
 			this->y = Y;
@@ -42,7 +41,7 @@ class Vector
 		}
 		void debug( const char* val)
 		{
-			fprintf( stderr, " %s %f %f %f", val, x, y, z);
+			fprintf( stderr, " %s %f %f %f \n", val, x, y, z);
 		}
 		float x;
 		float y;
@@ -64,12 +63,12 @@ class State
 			return *this;
 		}
 
-  		void debug( const char* val)
+		void debug( const char* val)
 		{
-			fprintf( stderr, " %s \n", val);
+			fprintf( stderr, "%s\n", val);
 			position.debug("position \n");
-			velocity.debug("\n velocity \n");
-			fprintf( stderr, " \n %s ", val);
+			velocity.debug("velocity \n");
+			fprintf( stderr, "\n");
 		}
 
 		Vector position;

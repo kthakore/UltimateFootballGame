@@ -13,7 +13,7 @@
 
 float ms_time()
 {
-  	const double t = glutGet(GLUT_ELAPSED_TIME);
+	const double t = glutGet(GLUT_ELAPSED_TIME);
 	return t;
 }
 
@@ -66,19 +66,15 @@ void GameController::game_loop()
 	//Draw ball here
 	// Render::draw_ball( render_ball_state );
 
-    glColor3d(1,0,0);
+	glColor3d(1,0,0);
 
-    glPushMatrix();
-        glTranslated(render_ball_state.position.x, render_ball_state.position.y, render_ball_state.position.z);
-		glScaled(0.1,0.3,0.1);
-        glRotated(60,1,0,0);
-        glutSolidSphere(1,16,16);
-    glPopMatrix();
+	glPushMatrix();
+	glTranslated(render_ball_state.position.x, render_ball_state.position.y, render_ball_state.position.z);
+	glScaled(0.1,0.3,0.1);
+	glRotated(60,1,0,0);
+	glutSolidSphere(1,16,16);
+	glPopMatrix();
 
-
-	render_ball_state.debug("fuck");
-
-	exit(0);
 }
 
 //Interporlates between states and the alpha value of the time changes
@@ -94,8 +90,6 @@ State GameController::interpolate( const State &previous, const State &current, 
 	state.position  =  c_p*alpha + p_p*(1-alpha);
 	state.velocity  = c_v*alpha + p_v*(1-alpha);
 
-
-	state.debug("Interpolate State");
 	return state;
 }
 //The acceleration of the ball
@@ -103,7 +97,7 @@ Vector GameController::acceleration( const State &state, float t)
 {
 	Vector change( 0, 0, 0);
 	//Apply Wind to X,Y,Z
-	
+
 	//Apply Power and Angle to X,Y,Z
 	return change; 
 }
@@ -114,7 +108,7 @@ Derivative GameController::evaluate( const State &initial, float t)
 	output.d_pos = initial.velocity;
 	Vector accel = acceleration(initial, t);
 	output.d_vel = accel;
-	
+
 	return output;
 }
 //Overloads Evaluate 
@@ -127,12 +121,14 @@ Derivative GameController::evaluate( const State &initial, float t, float dt, co
 	Vector i_v = initial.velocity;
 	Vector d_vel = d.d_vel;
 
-	state.position = i_p + d_pos*dt;
-	state.velocity = i_v + d_vel*dt;
+	state.position = i_p + (d_pos*dt);
+
+	state.velocity = i_v + (d_vel*dt);
 
 	Derivative output;
 
-	output.d_pos = state.position;
+	output.d_pos = state.velocity;
+
 	Vector dVel_step = acceleration(state, t+dt);
 
 	output.d_vel = dVel_step;
@@ -142,7 +138,6 @@ Derivative GameController::evaluate( const State &initial, float t, float dt, co
 //Integrate the position and velocity using rungekutta
 void GameController::integrate(State &state, float t, float dt)
 {
-	
 	Derivative a = evaluate(state, t);
 	Derivative b = evaluate(state, t, dt*0.5f, a);
 	Derivative c = evaluate(state, t, dt*0.5f, b);
