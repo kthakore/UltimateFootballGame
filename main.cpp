@@ -102,7 +102,7 @@ int main(int argc, char *argv[])
 	glTranslatef( 0, 0, -20 );
 	glMatrixMode(GL_MODELVIEW);
 
-    glutCreateWindow("GLUT Shapes");
+    glutCreateWindow("Ultimate Footbal");
 
     glutReshapeFunc(resize);
     glutDisplayFunc(display);
