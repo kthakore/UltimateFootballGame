@@ -1,8 +1,8 @@
-#ifndef GAMECONTROLLER_H
-#define GAMECONTROLLER_H
+#ifndef BALLCONTROLLER_H
+#define BALLCONTROLLER_H
 /*
 Class: BallController
-Purpose: Control and apply the game loop physics. 
+Purpose: Control and apply the game loop physics to the ball 
 */
 
 #include "Physics.h"
@@ -35,4 +35,4 @@ class BallController
 		State current; State previous;
 };
 
-#endif // GAMECONTROLLER_H
+#endif // BALLCONTROLLER_H
