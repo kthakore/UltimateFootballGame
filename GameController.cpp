@@ -122,8 +122,9 @@ State GameController::interpolate( const State &previous, const State &current, 
 //The acceleration of the ball
 Vector GameController::acceleration( const State &state, float t)
 {
-	Vector change;
+	Vector change( 0, -9.8f, 0);
 	//Apply Wind to X,Y,Z
+	
 	//Apply Power and Angle to X,Y,Z
 	return change; 
 }
