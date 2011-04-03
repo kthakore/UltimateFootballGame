@@ -1,5 +1,9 @@
 #ifndef PHYSICS_H
 #define PHYSICS_H
+
+#include <stdlib.h>
+#include <stdio.h>
+
 class Vector
 {
 
@@ -36,6 +40,10 @@ class Vector
 			this->y = Y;
 			this->z = Z;
 		}
+		void debug( const char* val)
+		{
+			fprintf( stderr, " %s %f %f %f", val, x, y, z);
+		}
 		float x;
 		float y;
 		float z;
@@ -52,10 +60,17 @@ class State
 				return *this;        // Yes, so skip assignment, and just return *this.
 
 			this->position = rhs.position;
-			this->velocity = rhs.position;
+			this->velocity = rhs.velocity;
 			return *this;
 		}
 
+  		void debug( const char* val)
+		{
+			fprintf( stderr, " %s \n", val);
+			position.debug("position \n");
+			velocity.debug("\n velocity \n");
+			fprintf( stderr, " \n %s ", val);
+		}
 
 		Vector position;
 		Vector velocity; 

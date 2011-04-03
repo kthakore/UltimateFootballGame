@@ -23,6 +23,10 @@ GameController::GameController()
 
 	Vector initial( -2.4f, 1.2f, -6.0f );
 	this->current.position = initial;
+	this->current.velocity = Vector(0,0,0);
+
+	this->previous = current;
+
 	t = 0.0f;
 	dt = 0.1f;
 
@@ -72,7 +76,9 @@ void GameController::game_loop()
     glPopMatrix();
 
 
+	render_ball_state.debug("fuck");
 
+//	exit(0);
 }
 
 //Interporlates between states and the alpha value of the time changes
@@ -85,10 +91,9 @@ State GameController::interpolate( const State &previous, const State &current, 
 
 	Vector c_v = current.velocity;
 	Vector p_v = previous.velocity;
-
-
 	state.position  =  c_p*alpha + p_p*(1-alpha);
 	state.velocity  = c_v*alpha + p_v*(1-alpha);
+
 
 	return state;
 }
@@ -108,7 +113,7 @@ Derivative GameController::evaluate( const State &initial, float t)
 	output.d_pos = initial.velocity;
 	Vector accel = acceleration(initial, t);
 	output.d_vel = accel;
-
+	
 	return output;
 }
 //Overloads Evaluate 
@@ -147,5 +152,6 @@ void GameController::integrate(State &state, float t, float dt)
 
 	state.position = state.position + dpos_dt*dt;
 	state.velocity = state.velocity + dvel_dt*dt;
+
 }
 
