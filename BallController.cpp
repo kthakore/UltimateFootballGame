@@ -113,7 +113,7 @@ Vector BallController::acceleration( const State &state, float t)
 	Vector change( 0, -0.000098, 0);
 
 	//Apply Wind to X,Y,Z
-
+	change = change + this->wind;
 	//Apply Power and Angle to X,Y,Z
 	return change; 
 }
