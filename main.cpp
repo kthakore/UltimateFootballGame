@@ -9,7 +9,6 @@
 #include "Physics.h"
 #include "BallController.h"
 
-int kick = 0;
 BallController ball; 
 /* GLUT callback Handlers */
 
@@ -47,12 +46,8 @@ static void display(void)
 	glScaled(10,30,0.1);
 	glutSolidCube(1);
 	glPopMatrix();
-
-
-	if( kick == 1 )
-	{
+	
 		ball.update();
-	}
 	glutSwapBuffers();
 
 }
@@ -68,7 +63,7 @@ static void key(unsigned char key, int x, int y)
 			break;
 		case ' ':
 			fprintf(stderr, "Kick!\n");
-			kick = 1;
+			ball.kick( Vector(0.0,0.04,-0.025), Vector(0.01,-0.01, 0.001) );
 			break;
 	}
 

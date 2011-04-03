@@ -2,8 +2,7 @@
 #include "Physics.h"
 #include <stdio.h>
 #include <stdlib.h>
-#include <time.h>
-#include <sys/time.h>
+
 #ifdef __APPLE__
 #include <GLUT/glut.h>
 #else
@@ -21,19 +20,12 @@ float ms_time()
 BallController::BallController()
 {
 
-	Vector initial( 0.0f, -2.0f, 18.0f );
-	this->current.position = initial;
-	this->current.velocity = Vector(0.0,0.04,-0.025);
-
-	this->previous = current;
-
-	t = 0.0f;
-	dt = 0.1f;
-
-	currentTime = 0.0f;
-	accumulator = 0.0f;
+	this->reset();
 
 }
+
+
+
 
 BallController::~BallController()
 {
@@ -41,41 +33,62 @@ BallController::~BallController()
 }
 
 void BallController::update()
-{	const float newTime = ms_time();
-	float deltaTime = newTime - this->currentTime;
-	this->currentTime = newTime;
+{	
 
-	if( deltaTime > 0.25f )
-		deltaTime = 0.25f;
-
-	this->accumulator += deltaTime;
-
-	while( this->accumulator >= this->dt )
+	if( this->kicked )
 	{
-		this->accumulator -= this->dt;
-		this->previous = this->current;
-		this->integrate( this->current, this->t, this->dt );
-		this->t += this->dt;	
+		const float newTime = ms_time();
+		float deltaTime = newTime - this->currentTime;
+		this->currentTime = newTime;
+
+		if( deltaTime > 0.25f )
+			deltaTime = 0.25f;
+
+		this->accumulator += deltaTime;
+
+		while( this->accumulator >= this->dt )
+		{
+			this->accumulator -= this->dt;
+			this->previous = this->current;
+			this->integrate( this->current, this->t, this->dt );
+			this->t += this->dt;	
+
+		}
+
+		State render_ball_state = interpolate( this->previous, this->current, this->accumulator/this->dt ); 
+
+		//Draw ball here
+		this->render(render_ball_state.position);
+
+	}
+	else
+	{
+
+		this->render( this->current.position );
 
 	}
 
-	State render_ball_state = interpolate( this->previous, this->current, this->accumulator/this->dt ); 
+	if( this->current.position.y < -10 )
+	{
+		fprintf(stderr, "Ball hit ground\n ");
+		this->reset();
+	}
 
-	//Draw ball here
+}
+
+void BallController::render( Vector position)
+{
 
 	glColor3d(1,0,0);
 
 	glPushMatrix();
-	glTranslated(render_ball_state.position.x, render_ball_state.position.y, render_ball_state.position.z);
+	glTranslated(position.x, position.y, position.z);
 	glScaled(0.1,0.3,0.1);
 	glRotated(60,1,0,0);
 	glutSolidSphere(1,16,16);
 	glPopMatrix();
 
-	if( render_ball_state.position.y < -10 )
-	{
-		fprintf(stderr, "Ball hit ground\n ");
-	}
+
 
 }
 
@@ -154,3 +167,29 @@ void BallController::integrate(State &state, float t, float dt)
 
 }
 
+void BallController::kick(Vector velocity, Vector windspeed)
+{
+
+	this->current.position = Vector(0.0f, -2.0f, 18.0f);
+	this->current.velocity = Vector(0.0,0.04,-0.025);
+	this->wind = windspeed;
+
+	this->previous = current;
+
+	t = 0.0f;
+	dt = 0.1f;
+
+	currentTime = 0.0f;
+	accumulator = 0.0f;
+
+	kicked = true;
+
+}
+
+void BallController::reset()
+{
+
+	this->current.position = Vector(0.0f, -2.0f, 18.0f);
+	kicked = false;
+
+}

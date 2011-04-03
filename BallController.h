@@ -14,6 +14,8 @@ class BallController
         BallController();
         virtual ~BallController();
 
+		void kick( Vector v, Vector w);
+
 		//Call once per glut display
 		void update();
  
@@ -28,11 +30,23 @@ class BallController
 		Derivative evaluate( const State &initial, float t, float dt, const Derivative &d);
 		//Integrate the position and velocity using rungekutta
 		void integrate(State &state, float t, float dt);
+		
+		//Render the BALL
+		void render( Vector p );
+
+		//reset the ball
+		void reset();
 
 		//Time Attributes
 		float t; float dt; float currentTime; float accumulator;
 
 		State current; State previous;
+
+		//kick
+		bool kicked;
+
+		//wind
+		Vector wind;	
 };
 
 #endif // BALLCONTROLLER_H
