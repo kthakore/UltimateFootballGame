@@ -78,7 +78,7 @@ void GameController::game_loop()
 
 	render_ball_state.debug("fuck");
 
-//	exit(0);
+	exit(0);
 }
 
 //Interporlates between states and the alpha value of the time changes
@@ -95,6 +95,7 @@ State GameController::interpolate( const State &previous, const State &current, 
 	state.velocity  = c_v*alpha + p_v*(1-alpha);
 
 
+	state.debug("Interpolate State");
 	return state;
 }
 //The acceleration of the ball
