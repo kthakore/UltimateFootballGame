@@ -4,63 +4,25 @@
 #include <stdlib.h>
 #include <time.h>
 #include <sys/time.h>
-
-#ifdef _WIN32
-
-#define VC_EXTRALEAN 
-#define WIN32_LEAN_AND_MEAN 
-
-#include <windows.h>
-#include <windowsx.h>
-float ms_time()
-{
-	static __int64 start = 0;
-	static __int64 frequency = 0;
-
-	if (start==0)
-	{
-		QueryPerformanceCounter((LARGE_INTEGER*)&start);
-		QueryPerformanceFrequency((LARGE_INTEGER*)&frequency);
-		return 0.0f;
-	}
-
-	__int64 counter = 0;
-	QueryPerformanceCounter((LARGE_INTEGER*)&counter);
-	return (float) ((counter - start) / double(frequency));
-}
-#elif __APPLE__
-
-#include <Carbon/Carbon.h>
-
-float ms_time()
-{
-	static UInt64 start = 0;
-
-	if (start==0)
-	{
-		Microseconds((UnsignedWide*)&start);
-		return 0.0f;
-	}
-
-	UInt64 counter = 0;
-	Microseconds((UnsignedWide*)&counter);
-	return (counter - start) / 1000000.0f;
-}
-
-
+#ifdef __APPLE__
+#include <GLUT/glut.h>
 #else
+#include <GL/glut.h>
+#endif
+
+
 float ms_time()
 {
-
-	struct timeval tv;
-	gettimeofday(&tv, NULL);
-	return tv.tv_usec;
+  	const double t = glutGet(GLUT_ELAPSED_TIME);
+	return t;
 }
 
-#endif
 
 GameController::GameController()
 {
+
+	Vector initial( -2.4f, 1.2f, -6.0f );
+	this->current.position = initial;
 	t = 0.0f;
 	dt = 0.1f;
 
@@ -100,6 +62,17 @@ void GameController::game_loop()
 	//Draw ball here
 	// Render::draw_ball( render_ball_state );
 
+    glColor3d(1,0,0);
+
+    glPushMatrix();
+        glTranslated(render_ball_state.position.x, render_ball_state.position.y, render_ball_state.position.z);
+		glScaled(0.1,0.3,0.1);
+        glRotated(60,1,0,0);
+        glutSolidSphere(1,16,16);
+    glPopMatrix();
+
+
+
 }
 
 //Interporlates between states and the alpha value of the time changes
@@ -122,7 +95,7 @@ State GameController::interpolate( const State &previous, const State &current, 
 //The acceleration of the ball
 Vector GameController::acceleration( const State &state, float t)
 {
-	Vector change( 0, -9.8f, 0);
+	Vector change( 0, 0, 0);
 	//Apply Wind to X,Y,Z
 	
 	//Apply Power and Angle to X,Y,Z

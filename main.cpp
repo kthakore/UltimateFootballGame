@@ -34,18 +34,10 @@ static void display(void)
     const double a = t*90.0;
 
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    glColor3d(1,0,0);
-
-    glPushMatrix();
-        glTranslated(-2.4,1.2,-6);
-		glScaled(0.1,0.3,0.1);
-        glRotated(60,1,0,0);
-        glutSolidSphere(1,16,16);
-    glPopMatrix();
-
-    glutSwapBuffers();
 
 	game.game_loop();
+    glutSwapBuffers();
+
 }
 
 
