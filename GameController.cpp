@@ -162,6 +162,16 @@ Derivative GameController::evaluate( const State &initial, float t, float dt, co
 //Integrate the position and velocity using rungekutta
 void GameController::integrate(State &state, float t, float dt)
 {
+	
+	Derivative a = evaluate(state, t);
+	Derivative b = evaluate(state, t, dt*0.5f, a);
+	Derivative c = evaluate(state, t, dt*0.5f, b);
+	Derivative d = evaluate(state, t, dt, c);
 
+	Vector dpos_dt =  ( a.d_pos + ( ( b.d_pos + c.d_pos ) *2.0f  ) + d.d_pos ) * (1.0f/6.0f); 
+	Vector dvel_dt =  ( a.d_vel + ( ( b.d_vel + c.d_vel ) *2.0f  ) + d.d_vel ) * (1.0f/6.0f); 
+
+	state.position = state.position + dpos_dt*dt;
+	state.velocity = state.velocity + dvel_dt*dt;
 }
 
