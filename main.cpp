@@ -18,13 +18,15 @@ static int stacks = 16;
 static void resize(int width, int height)
 {
     const float ar = (float) width / (float) height;
+// Set up the 3D projection
+	glEnable(GL_DEPTH_TEST);
+	glMatrixMode(GL_PROJECTION);
+	glLoadIdentity();
+	gluPerspective( 60, ar, 1, 700);
+	// Move the camera back a bit to see the scene
+	glTranslatef( 0, 0, -20 );
+	glMatrixMode(GL_MODELVIEW);
 
-    glViewport(0, 0, width, height);
-    glMatrixMode(GL_PROJECTION);
-    glLoadIdentity();
-    glFrustum(-ar, ar, -1.0, 1.0, 2.0, 100.0);
-
-    glMatrixMode(GL_MODELVIEW);
     glLoadIdentity() ;
 }
 
@@ -90,6 +92,15 @@ int main(int argc, char *argv[])
     glutInitWindowSize(640,480);
     glutInitWindowPosition(10,10);
     glutInitDisplayMode(GLUT_RGB | GLUT_DOUBLE | GLUT_DEPTH);
+
+	// Set up the 3D projection
+	glEnable(GL_DEPTH_TEST);
+	glMatrixMode(GL_PROJECTION);
+	glLoadIdentity();
+	gluPerspective( 60, 640/480, 1, 700);
+	// Move the camera back a bit to see the scene
+	glTranslatef( 0, 0, -20 );
+	glMatrixMode(GL_MODELVIEW);
 
     glutCreateWindow("GLUT Shapes");
 

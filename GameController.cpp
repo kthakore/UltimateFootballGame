@@ -21,9 +21,9 @@ float ms_time()
 GameController::GameController()
 {
 
-	Vector initial( -2.4f, 1.2f, -6.0f );
+	Vector initial( 0.0f, -2.0f, 18.0f );
 	this->current.position = initial;
-	this->current.velocity = Vector(0,0,0);
+	this->current.velocity = Vector(0.0,0.04,-0.025);
 
 	this->previous = current;
 
@@ -41,9 +41,7 @@ GameController::~GameController()
 }
 
 void GameController::game_loop()
-{
-
-	const float newTime = ms_time();
+{	const float newTime = ms_time();
 	float deltaTime = newTime - this->currentTime;
 	this->currentTime = newTime;
 
@@ -95,7 +93,8 @@ State GameController::interpolate( const State &previous, const State &current, 
 //The acceleration of the ball
 Vector GameController::acceleration( const State &state, float t)
 {
-	Vector change( 0, 0, 0);
+	Vector change( 0, -0.000098, 0);
+
 	//Apply Wind to X,Y,Z
 
 	//Apply Power and Angle to X,Y,Z
