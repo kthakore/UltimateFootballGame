@@ -83,8 +83,8 @@ void BallController::render( Vector position)
 
 	glPushMatrix();
 	glTranslated(position.x, position.y, position.z);
-	glScaled(0.1,0.3,0.1);
-	glRotated(60,1,0,0);
+	glScaled(0.1,0.1,0.3);
+	glRotated(60,0.4,0,0);
 	glutSolidSphere(1,16,16);
 	glPopMatrix();
 

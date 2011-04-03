@@ -82,8 +82,11 @@ static void key(unsigned char key, int x, int y)
 			break;
 		case ' ':
 			float angle =  randDouble( -0.000150, 0.000150) ;
-			fprintf(stderr, "Kick! rand angle %f \n", angle);
-			ball.kick( Vector(0.0,0.04,-0.09), Vector(angle, 0.0000001, 0.00000001) );
+			Vector initial_velocity = Vector(randDouble( -0.000150, 0.000150),0.02 + randDouble( 0, 0.05) ,-( 0.05+randDouble(0.0,0.04) ) );
+			initial_velocity.debug("Kick initial velocity");
+			Vector wind_affect_angle = Vector ( randDouble( -0.000150, 0.000150), 0.0000001, randDouble(-0.0001,0.0001));
+			wind_affect_angle.debug("Affect of Wind and Kick Angle");
+			ball.kick(  initial_velocity, wind_affect_angle );
 			break;
 	}
 
