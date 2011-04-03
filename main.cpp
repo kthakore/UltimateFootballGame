@@ -12,7 +12,26 @@
 BallController ball; 
 /* GLUT callback Handlers */
 
-static void resize(int width, int height)
+double randDouble(double low, double high)
+{
+	double temp;
+
+	/* swap low & high around if the user makes no sense */
+	if (low > high)
+	{
+		temp = low;
+		low = high;
+		high = temp;
+	}
+
+	/* calculate the random number & return it */
+	temp = (rand() / (static_cast<double>(RAND_MAX) + 1.0))
+		* (high - low) + low;
+	return temp;
+}
+
+
+void resize(int width, int height)
 {
 	const float ar = (float) width / (float) height;
 	// Set up the 3D projection
@@ -46,8 +65,8 @@ static void display(void)
 	glScaled(10,30,0.1);
 	glutSolidCube(1);
 	glPopMatrix();
-	
-		ball.update();
+
+	ball.update();
 	glutSwapBuffers();
 
 }
@@ -62,8 +81,9 @@ static void key(unsigned char key, int x, int y)
 			exit(0);
 			break;
 		case ' ':
-			fprintf(stderr, "Kick!\n");
-			ball.kick( Vector(0.0,0.04,-0.025), Vector(0.01,-0.01, 0.001) );
+			float angle =  randDouble( -0.000150, 0.000150) ;
+			fprintf(stderr, "Kick! rand angle %f \n", angle);
+			ball.kick( Vector(0.0,0.04,-0.09), Vector(angle, 0.0000001, 0.00000001) );
 			break;
 	}
 
@@ -103,7 +123,7 @@ int main(int argc, char *argv[])
 	glTranslatef( 0, 0, -20 );
 	glMatrixMode(GL_MODELVIEW);
 
-	glutCreateWindow("Ultimate Footbal");
+	glutCreateWindow("Ultimate Football");
 
 	glutReshapeFunc(resize);
 	glutDisplayFunc(display);

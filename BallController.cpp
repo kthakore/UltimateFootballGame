@@ -113,7 +113,7 @@ Vector BallController::acceleration( const State &state, float t)
 	Vector change( 0, -0.000098, 0);
 
 	//Apply Wind to X,Y,Z
-	change = change + this->wind;
+	change = change + this->wind ;
 	//Apply Power and Angle to X,Y,Z
 	return change; 
 }
@@ -171,7 +171,7 @@ void BallController::kick(Vector velocity, Vector windspeed)
 {
 
 	this->current.position = Vector(0.0f, -2.0f, 18.0f);
-	this->current.velocity = Vector(0.0,0.04,-0.025);
+	this->current.velocity = velocity;
 	this->wind = windspeed;
 
 	this->previous = current;
