@@ -88,6 +88,11 @@ void GameController::handle_key( unsigned char key, int x, int y )
 void GameController::check_collisions()
 {
 
+	Vector ball_position = this->ball.current.position;
 
-
+	if( ball_position.y < -10 )
+	{
+		fprintf(stderr, "Ball hit ground\n ");
+		ball.reset();
+	}
 }

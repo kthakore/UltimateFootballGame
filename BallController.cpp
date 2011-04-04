@@ -68,11 +68,7 @@ void BallController::update()
 
 	}
 
-	if( this->current.position.y < -10 )
-	{
-		fprintf(stderr, "Ball hit ground\n ");
-		this->reset();
-	}
+
 
 }
 
