@@ -1,7 +1,7 @@
 #include "BallController.h"
 #include "Physics.h"
 #include <stdio.h>
-#include <stdlib.h>
+#include <cstdlib>
 
 #ifdef __APPLE__
 #include <GLUT/glut.h>

@@ -1,5 +1,5 @@
 #include "GameController.h"
-#include <stdlib.h>
+#include <cstdlib>
 
 #include "Physics.h"
 #include "BarController.h"

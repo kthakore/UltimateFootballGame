@@ -1,7 +1,7 @@
 #ifndef PHYSICS_H
 #define PHYSICS_H
 
-#include <stdlib.h>
+#include <cstdlib>
 #include <stdio.h>
 
 class Vector
@@ -28,11 +28,13 @@ class Vector
 			this->y = rhs.y;
 			this->z = rhs.z;
 
+			return *this;
 		}
 		Vector& operator*(const float &rhs) {
 			this->x *= rhs;
 			this->y *= rhs;
 			this->z *= rhs;
+			return *this;
 		}	
 		Vector( float X, float Y, float Z ){
 			this->x = X;
