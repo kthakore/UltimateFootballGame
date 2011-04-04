@@ -17,6 +17,12 @@ class BarController
 		//Get the value	
 		float value();
 
+		//Max and min
+
+		float getMax();
+
+		float getMin();
+
 	private:
 		float val;
 		float increment; 

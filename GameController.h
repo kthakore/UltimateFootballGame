@@ -29,6 +29,7 @@ class GameController
 		BarController* kick_power;
 
 		Vector enemy;
+		Vector current_wind;
 
 		char state;
 		int goals;
@@ -36,6 +37,9 @@ class GameController
 		int chances_left;
 
 		void check_collisions();
+		void update_wind();
+		void render_bars();
+		void render_wind();
 	
 		
 };

@@ -28,3 +28,9 @@ void BarController::update()
 
 float BarController::value(){ return this->val; }
 
+float BarController::getMin(){ return this->min; }
+
+float BarController::getMax(){ return this->max; }
+
+
+

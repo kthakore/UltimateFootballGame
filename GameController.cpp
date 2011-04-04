@@ -51,7 +51,7 @@ void GameController::update()
 	glColor3d(0,0.7,0);
 	glPushMatrix();
 	glTranslated(0,-2,0);
-	glScaled(100,0.01,100);
+	glScaled(10,0.01,100);
 	glutSolidCube(1);
 	glPopMatrix();
 
@@ -63,6 +63,15 @@ void GameController::update()
 	glutSolidCube(1);
 	glPopMatrix();
 
+	//Render bars and wind 
+
+	this->render_bars();
+
+	this->render_wind();
+
+
+	this->update_wind();
+
 	this->kick_power->update();
 	
 	this->kick_angle->update();
@@ -70,6 +79,42 @@ void GameController::update()
 	this->ball.update();
 
 	this->check_collisions();
+	
+}
+
+
+void GameController::update_wind()
+{
+
+	this->current_wind = Vector ( randDouble( -0.000150, 0.000150), 0.0000001, randDouble(-0.0001,0.0001));
+	
+}
+
+void GameController::render_bars()
+{
+
+	/* On the bottom center left to right render 
+	this->kick_angle;
+		use 
+		this->kick_angle->value();
+		this->kick_angle->getMax();
+		this->kick_angle->getMin();
+	*/
+
+	/* On the left render 
+	this->kick_power;
+	*/
+
+
+}
+
+void GameController::render_wind()
+{
+
+	/* On the top left corner render 
+			this->current_wind; (x,y,z) as an arrow
+	*/
+
 }
 
 
@@ -88,7 +133,6 @@ void GameController::handle_key( unsigned char key, int x, int y )
 					Vector initial_velocity = Vector( 0, 0.02 + this->kick_power->value() , - 0.05  -this->kick_power->value() );
 					initial_velocity.debug("Kick initial velocity");
 					Vector wind_affect_angle = Vector ( randDouble( -0.000150, 0.000150), 0.0000001, randDouble(-0.0001,0.0001));
-		//			wind_affect_angle.debug("Affect of Wind and Kick Angle");
 					this->ball.kick(  initial_velocity, wind_affect_angle );
 					this->state = 'k';
 					break;
