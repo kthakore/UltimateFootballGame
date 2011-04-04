@@ -4,7 +4,6 @@
 #include "Physics.h"
 #include "BarController.h"
 #include "BallController.h"
-#include "EnemyController.h"
 
 double randDouble(double low, double high)
 {
@@ -71,10 +70,11 @@ void GameController::handle_key( unsigned char key, int x, int y )
 					//TODO: use the stuff from the bars kick_angle and kick_power
 					float angle =  randDouble( -0.000150, 0.000150) ;
 					Vector initial_velocity = Vector(randDouble( -0.000150, 0.000150),0.02 + randDouble( 0, 0.05) ,-( 0.05+randDouble(0.0,0.04) ) );
-					initial_velocity.debug("Kick initial velocity");
+		//			initial_velocity.debug("Kick initial velocity");
 					Vector wind_affect_angle = Vector ( randDouble( -0.000150, 0.000150), 0.0000001, randDouble(-0.0001,0.0001));
-					wind_affect_angle.debug("Affect of Wind and Kick Angle");
+		//			wind_affect_angle.debug("Affect of Wind and Kick Angle");
 					this->ball.kick(  initial_velocity, wind_affect_angle );
+					this->state = 'k';
 					break;
 
 
@@ -90,9 +90,10 @@ void GameController::check_collisions()
 
 	Vector ball_position = this->ball.current.position;
 
-	if( ball_position.y < -10 )
+	// Reset the ball if we hit the backwall or the ground
+	if( ball_position.y < -10  || ball_position.z < -20)
 	{
-		fprintf(stderr, "Ball hit ground\n ");
 		ball.reset();
+		this->state = 'g';
 	}
 }
