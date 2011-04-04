@@ -1,14 +1,12 @@
+#include <cstdlib>
+
+#include "GameController.h"
+
 #ifdef __APPLE__
 #include <GLUT/glut.h>
 #else
 #include <GL/glut.h>
 #endif
-
-#include <cstdlib>
-
-
-#include "GameController.h"
-
 GameController game;
 /* GLUT callback Handlers */
 

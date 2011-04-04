@@ -1,6 +1,6 @@
 #include "BallController.h"
 #include "Physics.h"
-#include <stdio.h>
+#include <iostream>
 #include <cstdlib>
 
 #ifdef __APPLE__
