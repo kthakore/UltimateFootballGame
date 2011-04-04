@@ -1,11 +1,10 @@
 #ifndef STATE_H
 #define STATE_H
 
-#include <cstdlib>
-#include <stdio.h>
-
 #include "Vector.h"
+#include <iostream>
 
+using namespace std;
 class State
 {
 	public:
@@ -22,10 +21,10 @@ class State
 
 		void debug( const char* val)
 		{
-			fprintf( stderr, "%s\n", val);
+			cerr << val << "n" << endl;	
 			position.debug("position \n");
 			velocity.debug("velocity \n");
-			fprintf( stderr, "\n");
+			cerr << endl;
 		}
 
 		Vector position;

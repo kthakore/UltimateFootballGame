@@ -1,11 +1,11 @@
+
+#ifndef __APPLE__
 #include <cstdlib>
+#endif 
 
 #include "GameController.h"
-GameController game;
+GameController* game;
 /* GLUT callback Handlers */
-
-
-
 void resize(int width, int height)
 {
 	const float ar = (float) width / (float) height;
@@ -25,23 +25,7 @@ static void display(void)
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	//Draw the field
-	glColor3d(0,0.7,0);
-	glPushMatrix();
-	glTranslated(0,-2,0);
-	glScaled(100,0.01,100);
-	glutSolidCube(1);
-	glPopMatrix();
-
-	//Draw the goal post
-	glColor3d(0.1,0.1,0.1);
-	glPushMatrix();
-	glTranslated(0,0,-20);
-	glScaled(10,30,0.1);
-	glutSolidCube(1);
-	glPopMatrix();
-
-	game.update(); 
+	game->update(); 
 
 	glutSwapBuffers();
 
@@ -57,7 +41,7 @@ static void key(unsigned char key, int x, int y)
 			exit(0);
 			break;
 	}
-	game.handle_key( key, x, y );
+	game->handle_key( key, x, y );
 	glutPostRedisplay();
 }
 
@@ -80,6 +64,8 @@ const GLfloat high_shininess[] = { 100.0f };
 
 int main(int argc, char *argv[])
 {
+	
+	game = new GameController();
 	glutInit(&argc, argv);
 	glutInitWindowSize(640,480);
 	glutInitWindowPosition(10,10);
@@ -125,5 +111,7 @@ int main(int argc, char *argv[])
 
 	glutMainLoop();
 
-	return EXIT_SUCCESS;
+	delete game;
+
+	return 1;
 }

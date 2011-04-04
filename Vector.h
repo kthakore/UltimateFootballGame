@@ -1,8 +1,5 @@
 #ifndef VEC_H
 #define VEC_H
-#include <cstdlib>
-#include <stdio.h>
-
 
 class Vector
 {

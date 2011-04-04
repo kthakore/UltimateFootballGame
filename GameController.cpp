@@ -47,6 +47,21 @@ GameController::~GameController()
 void GameController::update()
 {
 
+	//Draw the field
+	glColor3d(0,0.7,0);
+	glPushMatrix();
+	glTranslated(0,-2,0);
+	glScaled(100,0.01,100);
+	glutSolidCube(1);
+	glPopMatrix();
+
+	//Draw the goal post
+	glColor3d(0.1,0.1,0.1);
+	glPushMatrix();
+	glTranslated(0,0,-20);
+	glScaled(10,30,0.1);
+	glutSolidCube(1);
+	glPopMatrix();
 
 	this->kick_power->update();
 	
