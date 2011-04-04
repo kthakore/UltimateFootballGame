@@ -6,29 +6,12 @@
 
 #include <stdlib.h>
 
-#include "Physics.h"
-#include "BallController.h"
 
-BallController ball; 
+#include "GameController.h"
+
+GameController game;
 /* GLUT callback Handlers */
 
-double randDouble(double low, double high)
-{
-	double temp;
-
-	/* swap low & high around if the user makes no sense */
-	if (low > high)
-	{
-		temp = low;
-		low = high;
-		high = temp;
-	}
-
-	/* calculate the random number & return it */
-	temp = (rand() / (static_cast<double>(RAND_MAX) + 1.0))
-		* (high - low) + low;
-	return temp;
-}
 
 
 void resize(int width, int height)
@@ -66,7 +49,8 @@ static void display(void)
 	glutSolidCube(1);
 	glPopMatrix();
 
-	ball.update();
+	game.update(); 
+
 	glutSwapBuffers();
 
 }
@@ -80,16 +64,8 @@ static void key(unsigned char key, int x, int y)
 		case 'q':
 			exit(0);
 			break;
-		case ' ':
-			float angle =  randDouble( -0.000150, 0.000150) ;
-			Vector initial_velocity = Vector(randDouble( -0.000150, 0.000150),0.02 + randDouble( 0, 0.05) ,-( 0.05+randDouble(0.0,0.04) ) );
-			initial_velocity.debug("Kick initial velocity");
-			Vector wind_affect_angle = Vector ( randDouble( -0.000150, 0.000150), 0.0000001, randDouble(-0.0001,0.0001));
-			wind_affect_angle.debug("Affect of Wind and Kick Angle");
-			ball.kick(  initial_velocity, wind_affect_angle );
-			break;
 	}
-
+	game.handle_key( key, x, y );
 	glutPostRedisplay();
 }
 

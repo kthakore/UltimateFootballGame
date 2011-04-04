@@ -20,6 +20,9 @@ class GameController
 		//Call once per glut display
 		void update();
 
+		//Handle state specific key presses
+		void handle_key( unsigned char key, int x, int y );
+
 	private:
 		BallController ball;
 		BarController* kick_angle;
