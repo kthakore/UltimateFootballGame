@@ -25,6 +25,10 @@ class BallController : PhysicsManager
 		//reset the ball
 		void reset();
 
+	protected:
+
+
+		Vector acceleration( const State &state, float t);
 
 
 	private:

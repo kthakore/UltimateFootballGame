@@ -32,7 +32,7 @@ class PhysicsManager
 		State current; State previous;
 
 		//Will be overloaded by child class
-		Vector acceleration( const State &state, float t);
+		virtual Vector acceleration( const State &state, float t);
 
 
 
