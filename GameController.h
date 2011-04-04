@@ -1,9 +1,9 @@
 #ifndef GAMECONTROLLER_H
 #define GAMECONTROLLER_H
 
+#include "Physics.h"
 #include "BarController.h"
 #include "BallController.h"
-#include "EnemyController.h"
 
 /*
 Class: GameController
@@ -28,7 +28,7 @@ class GameController
 		BarController* kick_angle;
 		BarController* kick_power;
 
-//		EnemyController enemy;
+		Vector enemy;
 
 		char state;
 		int goals;
