@@ -11,7 +11,7 @@
 
 /* Helper functions */
 using namespace std; 
-template <class T>
+	template <class T>
 string to_string(T t, ios_base & (*f)(ios_base&))
 {
 	ostringstream oss;
@@ -19,6 +19,19 @@ string to_string(T t, ios_base & (*f)(ios_base&))
 	return oss.str();	
 }
 
+void draw_text(string str, float x, float y)
+{
+	glPushMatrix();
+	glTranslated(x,y,16);
+	glScaled(0.005,0.005,0.005);
+	for( int i = 0; i < str.length(); i++)
+	{
+		glutStrokeCharacter(GLUT_STROKE_ROMAN, str.at(i));
+	}
+	glPopMatrix();
+
+
+}
 double randDouble(double low, double high)
 {
 	double temp;
@@ -41,11 +54,16 @@ GameController::GameController()
 {
 
 	//Do this based on player attributes 
-	this->kick_angle = new BarController( -0.01, 0.01, 0.0, 0.001);
-	this->kick_power = new BarController( 0.0, 0.04, 0.0, 0.01);
+	this->kick_angle = new BarController( -0.01, 0.01, 0.0, 0.000001);
+	this->kick_power = new BarController( 0.0, 0.04, 0.0, 0.00001);
 
 	this->state = 'g'; //Just started so just go to game. We don't have a menu yet
 	this->goals = 0; this->misses = 0; this->chances_left = 5; 
+
+
+	this->update_wind();
+
+
 
 }
 
@@ -77,75 +95,117 @@ void GameController::update()
 	glutSolidCube(1);
 	glPopMatrix();
 
+
 	//Render bars and wind 
+	if( this->state == 'g' )
+	{
 
-	this->render_bars();
 
-	this->render_wind();
+		this->render_bars();
+
+		this->render_wind();
+
+		this->kick_power->update();
+
+		this->kick_angle->update();
+
+	}
+	else if( this->state == 'k')
+	{
+
+		this->ball.update();
+
+		this->check_collisions();
+
+	}
 
 	this->render_score();
 
-	this->update_wind();
-
-	this->kick_power->update();
-	
-	this->kick_angle->update();
-
-	this->ball.update();
-
-	this->check_collisions();
-	
 }
 
 
 void GameController::update_wind()
 {
+	this->current_wind = Vector ( randDouble( -0.000150, 0.000150), 0.0f, 0.0f);
 
-	this->current_wind = Vector ( randDouble( -0.000150, 0.000150), 0.0000001, randDouble(-0.0001,0.0001));
-	
 }
 
 void GameController::render_bars()
 {
 
 	/* On the bottom center left to right render 
-	this->kick_angle;
-		use 
-		this->kick_angle->value();
-		this->kick_angle->getMax();
-		this->kick_angle->getMin();
-	*/
+	   this->kick_angle;
+	   use 
+	   this->kick_angle->value();
+	   this->kick_angle->getMax();
+	   this->kick_angle->getMin();
+	 */
 
 	/* On the left render 
-	this->kick_power;
-	*/
+	   this->kick_power;
+	 */
+
+	float currentPower = this->kick_angle->value();
+	currentPower = currentPower * 75;
+
+	glColor3d(1,0,0);
+	glPushMatrix();
+	glTranslated(currentPower,1.6,17);
+	glScaled(0.05,0.5,0.00001);
+	glutSolidCube(1);
+	glPopMatrix();
 
 
+	currentPower = this->kick_power->value();
+	currentPower = currentPower * 37.5;
+
+	glColor3d(1,0,0);
+	glPushMatrix();
+	glTranslated(1.6,-1.5 + (currentPower),17);
+	glScaled(0.5,0.01 + (currentPower*2),0.00001);
+	glutSolidCube(1);
+	glPopMatrix();
 }
 
 void GameController::render_wind()
 {
 
 	/* On the top left corner render 
-			this->current_wind; (x,y,z) as an arrow
-	*/
+	   this->current_wind; (x,y,z) as an arrow
+	 */
+	float wind_x = this->current_wind.x; 
+	int direction;
+	if( wind_x < 0 ) 
+	{
+		direction = 0;
+	}
+	else if ( wind_x > 0 )
+	{
 
+		direction = 2;
+	}
+	else
+	{
+		direction = 1;
+	}
 }
+
+
 
 void GameController::render_score()
 {
 
-	string misses = to_string<int>(this->misses, dec);
+	string misses_str = to_string<int>(this->misses, dec);
 
 	glColor3d(0,1,0);
-	glPushMatrix();
-	glTranslated(-2.5,-1.9,16);
-	glScaled(0.005,0.005,0.005);
-	for( int i = 0; i < misses.length(); i++)
-	{
-		glutStrokeCharacter(GLUT_STROKE_ROMAN, misses.at(i));
-	}
-	glPopMatrix();
+	draw_text( misses_str, -2.5f, -1.9f);
+
+	string goals_str = to_string<int>(this->goals, dec);	
+
+	glColor3d(1,0,0);
+	draw_text( misses_str, -2.5f, 1.8f);
+
+
 }
 //handle key presses for different game states
 void GameController::handle_key( unsigned char key, int x, int y )
@@ -159,7 +219,7 @@ void GameController::handle_key( unsigned char key, int x, int y )
 				case ' ':
 					//TODO: use the stuff from the bars kick_angle and kick_power
 					float angle =  randDouble( -0.000150, 0.000150) ;
-					Vector initial_velocity = Vector( 0, 0.02 + this->kick_power->value() , - 0.05  -this->kick_power->value() );
+					Vector initial_velocity = Vector( this->kick_angle->value(), 0.02 + this->kick_power->value() , - 0.05  -this->kick_power->value() );
 					initial_velocity.debug("Kick initial velocity");
 					Vector wind_affect_angle = Vector ( randDouble( -0.000150, 0.000150), 0.0000001, randDouble(-0.0001,0.0001));
 					this->ball.kick(  initial_velocity, wind_affect_angle );
@@ -184,5 +244,7 @@ void GameController::check_collisions()
 	{
 		ball.reset();
 		this->state = 'g';
+		this->update_wind();
+
 	}
 }
