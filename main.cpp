@@ -71,6 +71,8 @@ int main(int argc, char *argv[])
 	glutInitWindowPosition(10,10);
 	glutInitDisplayMode(GLUT_RGB | GLUT_DOUBLE | GLUT_DEPTH);
 
+	glutCreateWindow("Ultimate Football");
+
 	// Set up the 3D projection
 	glEnable(GL_DEPTH_TEST);
 	glMatrixMode(GL_PROJECTION);
@@ -80,8 +82,7 @@ int main(int argc, char *argv[])
 	glTranslatef( 0, 0, -20 );
 	glMatrixMode(GL_MODELVIEW);
 
-	glutCreateWindow("Ultimate Football");
-
+	
 	glutReshapeFunc(resize);
 	glutDisplayFunc(display);
 	glutKeyboardFunc(key);
