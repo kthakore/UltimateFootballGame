@@ -82,7 +82,7 @@ GameController::~GameController()
 void GameController::update()
 {
 
-	//Draw the field
+//Draw the field
 	glColor3d(0,0.7,0);
 	glPushMatrix();
 	glTranslated(0,-2,0);
@@ -90,24 +90,55 @@ void GameController::update()
 	glutSolidCube(1);
 	glPopMatrix();
 
-
-	//field white sidelines
-	glColor3d(1.0,1.0,1.0);
+    //field white sidelines
+    glColor3d(1.0,1.0,1.0);
 	glPushMatrix();
 	glTranslated(0,-2.1,0);
 	glScaled(10,0.01,100);
 	glutSolidCube(1);
 	glPopMatrix();
+    
 
+    
 
-	//Draw the goal post
-	glColor3d(0.1,0.1,0.1);
+    
+    //cutout for the middle of the field goal
+    glColor3d(0.3,0.3,1.0);
+	glPushMatrix();
+	glTranslated(0,15,-20);
+	glScaled(8,26,0.1);
+	glutSolidCube(1);
+	glPopMatrix();
+    
+    //cutouts for the bottom of the field goal -- the middle bit
+    glColor3d(0.3,0.3,1.0);
+	glPushMatrix();
+	glTranslated(-3.2,-.75,-20);
+	glScaled(3.7,3.7,0.1);
+	glutSolidCube(1);
+	glPopMatrix();
+
+    glColor3d(0.3,0.3,1.0);
+	glPushMatrix();
+	glTranslated(3.2,-.75,-20);
+	glScaled(3.7,3.7,0.1);
+	glutSolidCube(1);
+	glPopMatrix();
+    
+    //Draw the goal post --- yellow background
+	glColor3d(1,1,0);
 	glPushMatrix();
 	glTranslated(0,0,-20);
 	glScaled(10,30,0.1);
 	glutSolidCube(1);
 	glPopMatrix();
 
+    glColor3d(1,1,0);
+	glPushMatrix();
+	glTranslated(0,0,-20);
+	glScaled(10,30,0.1);
+	glutSolidCube(1);
+	glPopMatrix();
 
 	//Render bars and wind 
 	if( this->state == 'g' )
