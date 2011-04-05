@@ -186,7 +186,7 @@ void GameController::render_enemies()
 
 void GameController::update_wind()
 {
-	this->current_wind = Vector ( randDouble( -0.0001, 0.0001), 0.0f, 0.0f);
+	this->current_wind = Vector ( randDouble( -0.00005, 0.00005), 0.0f, 0.0f);
 
 }
 
