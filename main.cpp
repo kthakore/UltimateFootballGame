@@ -88,7 +88,7 @@ int main(int argc, char *argv[])
 	glutKeyboardFunc(key);
 	glutIdleFunc(idle);
 
-	glClearColor(1,1,1,1);
+	glClearColor(0.3,0.3,1,1);
 	glEnable(GL_CULL_FACE);
 	glCullFace(GL_BACK);
 

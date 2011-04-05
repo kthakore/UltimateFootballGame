@@ -33,13 +33,14 @@ class GameController
 
 		char state;
 		int goals;
-		int misses; 
-		int chances_left;
+		int misses;			
+		int chances_left;	//default is 5
 
 		void check_collisions();
 		void update_wind();
 		void render_bars();
 		void render_wind();
+		void render_score();
 	
 		
 };

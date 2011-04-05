@@ -1,9 +1,23 @@
 #include "GameController.h"
 #include <cstdlib>
 
+#include <string>
+#include <sstream>
+#include <iostream>
+
 #include "Physics.h"
 #include "BarController.h"
 #include "BallController.h"
+
+/* Helper functions */
+using namespace std; 
+template <class T>
+string to_string(T t, ios_base & (*f)(ios_base&))
+{
+	ostringstream oss;
+	oss << f << t;
+	return oss.str();	
+}
 
 double randDouble(double low, double high)
 {
@@ -31,7 +45,7 @@ GameController::GameController()
 	this->kick_power = new BarController( 0.0, 0.04, 0.0, 0.01);
 
 	this->state = 'g'; //Just started so just go to game. We don't have a menu yet
-	this->goals = 0; this->misses = 0; this->chances_left = 0; 
+	this->goals = 0; this->misses = 0; this->chances_left = 5; 
 
 }
 
@@ -69,6 +83,7 @@ void GameController::update()
 
 	this->render_wind();
 
+	this->render_score();
 
 	this->update_wind();
 
@@ -117,7 +132,21 @@ void GameController::render_wind()
 
 }
 
+void GameController::render_score()
+{
 
+	string misses = to_string<int>(this->misses, dec);
+
+	glColor3d(0.8,0.8,0.8);
+	glPushMatrix();
+	glTranslated(-2.5,-1.9,16);
+	glScaled(0.005,0.005,0.005);
+	for( int i = 0; i < misses.length(); i++)
+	{
+		glutStrokeCharacter(GLUT_STROKE_ROMAN, misses.at(i));
+	}
+	glPopMatrix();
+}
 //handle key presses for different game states
 void GameController::handle_key( unsigned char key, int x, int y )
 {
