@@ -8,6 +8,7 @@
 #include "Physics.h"
 #include "BarController.h"
 #include "BallController.h"
+#include "EnemyController.h"
 
 /* Helper functions */
 using namespace std; 
@@ -23,7 +24,7 @@ void draw_text(string str, float x, float y)
 {
 	glPushMatrix();
 	glTranslated(x,y,16);
-	glScaled(0.005,0.005,0.005);
+	glScaled(0.001,0.001,0.001);
 	for( int i = 0; i < str.length(); i++)
 	{
 		glutStrokeCharacter(GLUT_STROKE_ROMAN, str.at(i));
@@ -54,11 +55,13 @@ GameController::GameController()
 {
 
 	//Do this based on player attributes 
-	this->kick_angle = new BarController( -0.01, 0.01, 0.0, 0.000001);
+	this->kick_angle = new BarController( -0.01, 0.01, 0.0, 0.00001);
 	this->kick_power = new BarController( 0.0, 0.04, 0.0, 0.00001);
 
 	this->state = 'g'; //Just started so just go to game. We don't have a menu yet
 	this->goals = 0; this->misses = 0; this->chances_left = 5; 
+
+	this->enemy = new EnemyController(0,0,0);
 
 
 	this->update_wind();
@@ -73,7 +76,7 @@ GameController::~GameController()
 
 	delete this->kick_angle;
 	delete this->kick_power;
-
+	delete this->enemy;
 }
 
 void GameController::update()
@@ -83,9 +86,19 @@ void GameController::update()
 	glColor3d(0,0.7,0);
 	glPushMatrix();
 	glTranslated(0,-2,0);
+	glScaled(8,0.01,100);
+	glutSolidCube(1);
+	glPopMatrix();
+
+
+	//field white sidelines
+	glColor3d(1.0,1.0,1.0);
+	glPushMatrix();
+	glTranslated(0,-2.1,0);
 	glScaled(10,0.01,100);
 	glutSolidCube(1);
 	glPopMatrix();
+
 
 	//Draw the goal post
 	glColor3d(0.1,0.1,0.1);
@@ -100,6 +113,8 @@ void GameController::update()
 	if( this->state == 'g' )
 	{
 
+
+		this->render_enemies();
 
 		this->render_bars();
 
@@ -123,10 +138,24 @@ void GameController::update()
 
 }
 
+//DRAWS AND MOVES THE ENEMIES
+void GameController::render_enemies()
+{
+	glColor3d(1.0,0,0);
+	glPushMatrix();
+	glTranslated(0,-2,this->enemy->currentPosition.z);
+	glScaled(2,1,1);
+	glutSolidCube(1);
+	glPopMatrix();
+
+	this->enemy->move();
+
+
+}
 
 void GameController::update_wind()
 {
-	this->current_wind = Vector ( randDouble( -0.000150, 0.000150), 0.0f, 0.0f);
+	this->current_wind = Vector ( randDouble( -0.0001, 0.0001), 0.0f, 0.0f);
 
 }
 
@@ -170,40 +199,64 @@ void GameController::render_bars()
 void GameController::render_wind()
 {
 
-	/* On the top left corner render 
+	/* On the top left corner render
 	   this->current_wind; (x,y,z) as an arrow
 	 */
-	float wind_x = this->current_wind.x; 
+	float wind_x = this->current_wind.x;
 	int direction;
-	if( wind_x < 0 ) 
+	if( wind_x < 0 )
 	{
-		direction = 0;
+		//Draw left arrow
+		glColor3d(1,0,0);
+		glPushMatrix();
+		glTranslated(-1.9, 0.2, 17);
+		glScaled(0.2,0.2,0.00001);
+		glRotated(-90,0,1,0);
+		glutSolidCone(0.5,1,10,10);
+		glPopMatrix();
+
 	}
 	else if ( wind_x > 0 )
 	{
+		//Draw right arrow
+		glColor3d(1,0,0);
+		glPushMatrix();
+		glTranslated(-2.0, 0.2, 17);
+		glScaled(0.2,0.2,0.00001);
+		glRotated(90,0,1,0);
+		glutSolidCone(0.5,1,10,10);
+		glPopMatrix();
 
-		direction = 2;
 	}
-	else
+
+
+	wind_x *= 100000;
+
+	if (wind_x < 0)
 	{
-		direction = 1;
+		wind_x = -wind_x;
 	}
-}
 
+	string windString = to_string<int>((int)wind_x, dec);
+	windString.append(" km/h");
+	draw_text(windString, -2.9, -0.2);
+}
 
 
 void GameController::render_score()
 {
+string misses_str = "Misses: ";
+misses_str.append(to_string<int>(this->misses, dec));
 
-	string misses_str = to_string<int>(this->misses, dec);
 
-	glColor3d(0,1,0);
-	draw_text( misses_str, -2.5f, -1.9f);
+glColor3d(1,0,0);
+draw_text( misses_str, -2.5f, -1.9f);
 
-	string goals_str = to_string<int>(this->goals, dec);	
+string goals_str = "Goals: ";
+goals_str.append(to_string<int>(this->goals, dec));
 
-	glColor3d(1,0,0);
-	draw_text( misses_str, -2.5f, 1.8f);
+glColor3d(0,1,0);
+draw_text( goals_str, -2.5f, 1.8f);
 
 
 }
@@ -239,12 +292,33 @@ void GameController::check_collisions()
 
 	Vector ball_position = this->ball.current.position;
 
+	double football_top = ball_position.y;
+	double football_right = ball_position.x ;
+
+	double goalpost_bottom = -2;
+	double goalpost_left = -4.6;
+	double goalpost_right = 4.75;
+
+
+
+
 	// Reset the ball if we hit the backwall or the ground
 	if( ball_position.y < -10  || ball_position.z < -20)
 	{
-		ball.reset();
+		this->ball.reset();
 		this->state = 'g';
 		this->update_wind();
+		this->enemy->reset();
+
+		if(football_top > goalpost_bottom && football_right > goalpost_left && football_right < goalpost_right     ) {
+
+			this->goals++;
+
+		}	
+		else
+		{
+			this->misses++;
+		}
 
 	}
 }

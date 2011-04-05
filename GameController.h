@@ -4,6 +4,7 @@
 #include "Physics.h"
 #include "BarController.h"
 #include "BallController.h"
+#include "EnemyController.h"
 
 /*
 Class: GameController
@@ -28,7 +29,7 @@ class GameController
 		BarController* kick_angle;
 		BarController* kick_power;
 
-		Vector enemy;
+		EnemyController* enemy;
 		Vector current_wind;
 
 		char state;
@@ -41,6 +42,7 @@ class GameController
 		void render_bars();
 		void render_wind();
 		void render_score();
+		void render_enemies();
 	
 		
 };
