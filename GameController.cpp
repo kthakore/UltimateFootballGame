@@ -137,7 +137,7 @@ void GameController::render_score()
 
 	string misses = to_string<int>(this->misses, dec);
 
-	glColor3d(0.8,0.8,0.8);
+	glColor3d(0,1,0);
 	glPushMatrix();
 	glTranslated(-2.5,-1.9,16);
 	glScaled(0.005,0.005,0.005);
