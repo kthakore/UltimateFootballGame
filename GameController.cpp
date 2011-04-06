@@ -330,11 +330,8 @@ void GameController::check_collisions()
 	double goalpost_left = -4.6;
 	double goalpost_right = 4.75;
 
-
-
-
 	// Reset the ball if we hit the backwall or the ground
-	if( ball_position.y < -10  || ball_position.z < -20)
+	if( ball_position.y < -10  || ball_position.z < -20 || ball_position.x < -15 || ball_position.x > 15)
 	{
 		this->ball.reset();
 		this->state = 'g';
