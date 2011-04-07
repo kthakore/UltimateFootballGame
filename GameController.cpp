@@ -82,7 +82,7 @@ GameController::~GameController()
 void GameController::update()
 {
 
-//Draw the field
+	//Draw the field
 	glColor3d(0,0.7,0);
 	glPushMatrix();
 	glTranslated(0,-2,0);
@@ -90,42 +90,42 @@ void GameController::update()
 	glutSolidCube(1);
 	glPopMatrix();
 
-    //field white sidelines
-    glColor3d(1.0,1.0,1.0);
+	//field white sidelines
+	glColor3d(1.0,1.0,1.0);
 	glPushMatrix();
 	glTranslated(0,-2.1,0);
 	glScaled(10,0.01,100);
 	glutSolidCube(1);
 	glPopMatrix();
-    
 
-    
 
-    
-    //cutout for the middle of the field goal
-    glColor3d(0.3,0.3,1.0);
+
+
+
+	//cutout for the middle of the field goal
+	glColor3d(0.3,0.3,1.0);
 	glPushMatrix();
 	glTranslated(0,15,-20);
 	glScaled(8,26,0.1);
 	glutSolidCube(1);
 	glPopMatrix();
-    
-    //cutouts for the bottom of the field goal -- the middle bit
-    glColor3d(0.3,0.3,1.0);
+
+	//cutouts for the bottom of the field goal -- the middle bit
+	glColor3d(0.3,0.3,1.0);
 	glPushMatrix();
 	glTranslated(-3.2,-.75,-20);
 	glScaled(3.7,3.7,0.1);
 	glutSolidCube(1);
 	glPopMatrix();
 
-    glColor3d(0.3,0.3,1.0);
+	glColor3d(0.3,0.3,1.0);
 	glPushMatrix();
 	glTranslated(3.2,-.75,-20);
 	glScaled(3.7,3.7,0.1);
 	glutSolidCube(1);
 	glPopMatrix();
-    
-    //Draw the goal post --- yellow background
+
+	//Draw the goal post --- yellow background
 	glColor3d(1,1,0);
 	glPushMatrix();
 	glTranslated(0,0,-20);
@@ -133,7 +133,7 @@ void GameController::update()
 	glutSolidCube(1);
 	glPopMatrix();
 
-    glColor3d(1,1,0);
+	glColor3d(1,1,0);
 	glPushMatrix();
 	glTranslated(0,0,-20);
 	glScaled(10,30,0.1);
@@ -186,7 +186,7 @@ void GameController::render_enemies()
 
 void GameController::update_wind()
 {
-	this->current_wind = Vector ( randDouble( -0.00005, 0.00005), 0.0f, 0.0f);
+	this->current_wind = Vector ( randDouble( -0.00006, 0.00006), 0.0f, 0.0f);
 
 }
 
@@ -263,10 +263,8 @@ void GameController::render_wind()
 
 	wind_x *= 100000;
 
-	if (wind_x < 0)
-	{
-		wind_x = -wind_x;
-	}
+	if(wind_x < 0 )
+		wind_x *= -1; 
 
 	string windString = to_string<int>((int)wind_x, dec);
 	windString.append(" km/h");
@@ -276,18 +274,18 @@ void GameController::render_wind()
 
 void GameController::render_score()
 {
-string misses_str = "Misses: ";
-misses_str.append(to_string<int>(this->misses, dec));
+	string misses_str = "Misses: ";
+	misses_str.append(to_string<int>(this->misses, dec));
 
 
-glColor3d(1,0,0);
-draw_text( misses_str, -2.5f, -1.9f);
+	glColor3d(1,0,0);
+	draw_text( misses_str, -2.5f, -1.9f);
 
-string goals_str = "Goals: ";
-goals_str.append(to_string<int>(this->goals, dec));
+	string goals_str = "Goals: ";
+	goals_str.append(to_string<int>(this->goals, dec));
 
-glColor3d(0,1,0);
-draw_text( goals_str, -2.5f, 1.8f);
+	glColor3d(0,1,0);
+	draw_text( goals_str, -2.5f, 1.8f);
 
 
 }
@@ -302,11 +300,9 @@ void GameController::handle_key( unsigned char key, int x, int y )
 			{
 				case ' ':
 					//TODO: use the stuff from the bars kick_angle and kick_power
-					float angle =  randDouble( -0.000150, 0.000150) ;
 					Vector initial_velocity = Vector( this->kick_angle->value(), 0.02 + this->kick_power->value() , - 0.05  -this->kick_power->value() );
-					initial_velocity.debug("Kick initial velocity");
-					Vector wind_affect_angle = Vector ( randDouble( -0.000150, 0.000150), 0.0000001, randDouble(-0.0001,0.0001));
-					this->ball.kick(  initial_velocity, wind_affect_angle );
+
+					this->ball.kick(  initial_velocity, this->current_wind );
 					this->state = 'k';
 					break;
 
